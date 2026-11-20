@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#164538"><title>冰箱里有什么</title>
+<style>
+:root{font:16px/1.6 "DM Sans","Microsoft YaHei",system-ui,sans-serif;color:#19392d;background:#f5f6ee;--green:#164538;--line:#dbe0d0}*{box-sizing:border-box}body{margin:0}main{max-width:900px;margin:auto;padding:30px 22px 60px}button,input,select{font:inherit}button{cursor:pointer;color:inherit;background:#fffef9;border:1px solid #cbd5c5;border-radius:10px;padding:8px 13px}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #ce8820;outline-offset:2px}.top,.head,.tools,.line,.foot,.actions{display:flex;align-items:center;gap:10px}.top,.head,.line,.foot{justify-content:space-between}.top{padding-bottom:20px}.brand{font-weight:750}.brand span{margin-right:7px}.top button{font-size:14px}.hero{background:var(--green);color:#fffef1;border-radius:24px;padding:28px 30px}.hero h1{font-size:clamp(30px,5vw,45px);line-height:1.25;margin:0 0 18px}.hero #summary{color:#e5eadc;font-size:15px}.add{background:#e6ed93;color:#173a27;border:0;font-weight:750;padding:11px 18px;white-space:nowrap}h2,h3,p{margin:0}.panel{margin-top:18px;background:#fffef9;border:1px solid var(--line);border-radius:18px;padding:20px}.tools{flex-wrap:wrap;margin:14px 0}.tools input{flex:1;min-width:140px}.filters{display:flex;gap:6px;flex-wrap:wrap}.filters button{border-radius:20px;padding:6px 13px;font-size:14px}.filters button[aria-pressed=true]{background:var(--green);color:#fff;border-color:var(--green)}input,select{width:100%;padding:9px 11px;border:1px solid #ccd4c5;border-radius:9px;background:#fff;color:#1a392e}.row{border-top:1px solid var(--line);display:grid;grid-template-columns:45px minmax(0,1fr) auto;gap:12px;align-items:center;padding:14px 0}.tile{font-size:25px;border-radius:13px;padding:4px;text-align:center;background:#eef2e3}.itemName{font-size:17px;font-weight:750;overflow-wrap:anywhere}.detail,.fine{font-size:13px;color:#58685e}.tag{font-size:13px;border-radius:20px;padding:3px 9px;background:#eef2e9;color:#405943;white-space:nowrap}.soon{background:#ffedbc;color:#825615}.past{background:#fae3db;color:#963c24}.actions{justify-content:flex-end;flex-wrap:wrap;margin-top:5px}.actions button{font-size:13px;padding:4px 9px}.end{text-align:right}.empty{text-align:center;padding:28px 0 20px}.empty p{margin:4px 0 12px;color:#56665c}.empty b{font-size:19px}.notice:not(:empty){background:#f4ebcb;padding:8px 12px;border-radius:9px;margin:12px 0}.notice button{margin-left:10px}.foot{margin:14px 2px;color:#5e7064;font-size:13px}.foot button{font-size:13px}.badge{font-weight:650;color:#6c5318}.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.wide{grid-column:1/-1}label{display:grid;gap:4px;font-size:14px;font-weight:650}.chips{display:flex;flex-wrap:wrap;gap:5px;margin:7px 0 12px}.chips button{font-size:13px;padding:4px 9px}dialog{width:min(450px,94vw);border:0;border-radius:18px;color:#19392d;padding:22px;background:#fffef9;max-height:90dvh;overflow:auto}dialog::backdrop{background:#163a3080}.head{margin-bottom:10px}.head h2{font-size:22px}.head button{padding:3px 10px}.submit{margin-top:18px;background:var(--green);color:white;border:0;font-weight:bold;width:100%}.delete{background:none;border:0;text-decoration:underline;color:#8e3b27;font-size:14px;margin-top:8px}#status{font-size:14px}button:disabled{opacity:.55} @media(max-width:550px){main{padding:16px 12px 36px}.hero{padding:21px 16px}.hero h1{margin-bottom:12px;font-size:28px}.panel{padding:14px 12px}.top{padding-bottom:13px}.row{grid-template-columns:34px minmax(0,1fr) auto;gap:7px}.tile{font-size:21px}.detail{font-size:12px}.actions{gap:4px}.actions button{padding:4px 7px}.foot{align-items:flex-start}.hero .line{align-items:flex-start}.add{padding:9px 11px}}
+</style></head><body><main>
+<div class="top"><div class="brand"><span aria-hidden="true">🧊</span>我的冰箱</div><button id="demo"></button></div>
+<section class="hero"><div class="line"><h1>冰箱里有什么</h1><button class="add" id="new">＋ 放入食材</button></div><p id="summary"></p></section>
+<div class="notice" role="status" id="status"></div>
+<section class="panel"><div class="line"><h2>库存清单</h2><span class="badge" id="demoFlag"></span></div>
+<div class="tools"><input id="search" type="search" placeholder="搜索食材，例如鸡蛋" aria-label="搜索食材"></div>
+<div class="filters" id="filters" aria-label="筛选库存"></div><div id="list"></div></section>
+<div class="foot"><span>保存在当前浏览器 · 日期由你填写</span><span id="count"></span></div>
+</main>
+<dialog id="editor"><form id="entry"><div class="head"><h2 id="title"></h2><button type="button" id="close" aria-label="关闭">×</button></div>
+<label>食材名称<input id="name" required maxlength="45" autocomplete="off" placeholder="例如：鲜牛奶"></label>
+<div class="chips" id="quick" aria-label="常用食材"></div>
+<div class="fgrid"><label>数量<input id="qty" type="number" step="0.01" min="0.01" max="999999" required value="1"></label>
+<label>单位<input id="unit" required maxlength="8" list="units" value="个"><datalist id="units"><option>个</option><option>盒</option><option>袋</option><option>瓶</option><option>份</option><option>克</option><option>千克</option><option>毫升</option></datalist></label>
+<label>存放分区<select id="zone"><option>冷藏</option><option>冷冻</option></select></label><label>类别<select id="cat"></select></label>
+<label class="wide">到期日期（选填）<input id="expiry" type="date"></label></div>
+<button class="submit">保存食材</button><button id="del" type="button" class="delete" hidden>移除这条记录</button></form></dialog>
+<dialog id="consume"><form id="usage"><div class="head"><h2 id="useTitle">用掉食材</h2><button type="button" id="closeUse" aria-label="关闭">×</button></div><p class="fine" id="remaining"></p><label>这次用掉多少？<input type="number" step="0.01" min="0.01" id="portion" required></label><button class="submit">确认用掉</button></form></dialog>
+<script>
+'use strict';
+const $=id=>document.getElementById(id);
+const labels={vegetable:['蔬菜','🥬'],meat:['肉类','🥩'],seafood:['海鲜','🦐'],dairy:['蛋奶','🥛'],fruit:['水果','🍎'],grain:['主食','🍚'],condiment:['调味品','🧂'],beverage:['饮品','🧃'],other:['其他','🥣']};
+const shortcuts=[['鸡蛋','个','dairy'],['牛奶','盒','dairy'],['番茄','个','vegetable'],['青菜','把','vegetable'],['豆腐','盒','other'],['鸡胸肉','克','meat'],['虾仁','克','seafood'],['水饺','袋','grain']];
+const modes=['全部','冷藏','冷冻','快到期','已过期'];
+const key='fridge-at-a-glance.v1';
+const num=n=>Math.round(Number(n)*100)/100;
+function dateKey(d=new Date()){return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-')}
+function offset(day){const d=new Date();d.setDate(d.getDate()+day);return dateKey(d)}
+function daysLeft(date,today=dateKey()){return date?(Date.parse(date+'T00:00:00Z')-Date.parse(today+'T00:00:00Z'))/86400000:Infinity}
+function freshness(date){const n=daysLeft(date);if(n===Infinity)return ['未填日期',''];if(n<0)return ['已过期 '+(-n)+' 天','past'];if(n===0)return ['今天到期','soon'];if(n===1)return ['明天到期','soon'];return [n+' 天后到期',n<=2?'soon':'']}
+function readStore(){const a=JSON.parse(localStorage.getItem(key)||'[]');if(!Array.isArray(a))throw Error('库存格式无效');return a}
+function sample(){return [['牛奶',1,'盒','冷藏','dairy',1],['番茄',3,'个','冷藏','vegetable',2],['鸡蛋',8,'个','冷藏','dairy',9],['鸡胸肉',400,'克','冷冻','meat',20],['冷冻水饺',2,'袋','冷冻','grain',35]].map(([name,qty,unit,zone,cat,days],i)=>({id:'demo'+i,name,qty,unit,zone,cat,expiry:offset(days)}))}
+let rows=[],examples=sample(),demo=false,filter='全部',editing=null,using=null,lastUndo=null,readable=true;
+try{rows=readStore()}catch{readable=false}
+const active=()=>demo?examples:rows;
+function element(tag,txt,cls){const el=document.createElement(tag);el.textContent=txt;if(cls)el.className=cls;return el}
+function button(label,fn){const b=element('button',label);b.type='button';b.onclick=fn;return b}
+function message(txt,undo=null){lastUndo=undo;$('status').replaceChildren(document.createTextNode(txt));if(undo)$('status').append(button('撤销',()=>{if(lastUndo)lastUndo()}))}
+function change(fn){try{if(!demo&&!readable)throw Error();const next=fn(demo?examples:readStore());if(demo)examples=next;else{localStorage.setItem(key,JSON.stringify(next));rows=next}render();return true}catch{message('无法保存库存，请检查浏览器存储空间或重新打开页面。');return false}}
+function toggleDemo(){demo=!demo;filter='全部';$('search').value='';message('');render()}
+function render(){const all=active(),q=$('search').value.trim().toLocaleLowerCase(),near=all.filter(x=>freshness(x.expiry)[1]==='soon').length,expired=all.filter(x=>daysLeft(x.expiry)<0).length;
+ $('demo').textContent=demo?'回到我的冰箱':'看看示例冰箱';$('demoFlag').textContent=demo?'示例库存':'';$('summary').textContent='冷藏 '+all.filter(x=>x.zone==='冷藏').length+' 批　·　冷冻 '+all.filter(x=>x.zone==='冷冻').length+' 批　·　快到期 '+near+' 批'+(expired?'　·　已过期 '+expired+' 批':'');
+ $('filters').replaceChildren(...modes.map(m=>{const b=button(m,()=>{filter=m;render()});b.setAttribute('aria-pressed',String(filter===m));return b}));
+ const visible=all.filter(x=>x.name.toLocaleLowerCase().includes(q)&&(filter==='全部'||filter===x.zone||filter==='快到期'&&freshness(x.expiry)[1]==='soon'||filter==='已过期'&&daysLeft(x.expiry)<0)).sort((a,b)=>(a.expiry||'9999').localeCompare(b.expiry||'9999')||a.name.localeCompare(b.name,'zh'));
+ $('list').replaceChildren();$('count').textContent='显示 '+visible.length+' / '+all.length+' 批';
+ for(const x of visible){const row=element('article','','row'),mid=element('div',''),end=element('div','','end'),kind=labels[x.cat]||labels.other,[label,urgency]=freshness(x.expiry);
+ mid.append(element('div',x.name,'itemName'),element('div',x.zone+' · '+x.qty+' '+x.unit+(x.expiry?' · '+x.expiry.slice(5).replace('-','/'):''),'detail'));
+ const acts=element('div','','actions');acts.append(button('用掉',()=>use(x)),button('编辑',()=>edit(x)));end.append(element('span',label,'tag '+urgency),acts);row.append(element('div',kind[1],'tile'),mid,end);$('list').append(row)}
+ if(!visible.length){const box=element('div','','empty');box.append(element('b',all.length?'没有符合条件的食材':'冰箱清单还是空的'),element('p',all.length?'可以换个分区或搜索词。':'从手边的一盒牛奶或几个鸡蛋开始。'));if(!all.length)box.append(button('放入第一样食材',()=>edit()));$('list').append(box)}
+}
+function edit(x=null){editing=x?.id??null;$('title').textContent=x?'编辑食材':'放入食材';$('name').value=x?.name??'';$('qty').value=x?.qty??1;$('unit').value=x?.unit??'个';$('zone').value=x?.zone??(filter==='冷冻'?'冷冻':'冷藏');$('cat').value=x?.cat??'vegetable';$('expiry').value=x?.expiry??'';$('del').hidden=!x;$('editor').showModal();$('name').focus()}
+function use(x){using=x.id;$('useTitle').textContent='用掉'+x.name;$('remaining').textContent='当前库存 '+x.qty+' '+x.unit;$('portion').value=Math.min(x.qty,1);$('portion').max=x.qty;$('consume').showModal();$('portion').select()}
+function restoreItem(old,after){return ()=>{let conflict=false;if(change(a=>{const cur=a.find(i=>i.id===old.id);if(JSON.stringify(cur)!==JSON.stringify(after)){conflict=true;return a}return [...a.filter(i=>i.id!==old.id),old]}))message(conflict?'这条库存已有其他修改，无法撤销。':'已恢复库存。')}}
+$('entry').onsubmit=e=>{e.preventDefault();const name=$('name').value.trim(),unit=$('unit').value.trim();if(!name||!unit){message('请填写食材名称和单位。');return}
+ const item={id:editing||(globalThis.crypto?.randomUUID?.()??(Date.now().toString(36)+'-'+Math.random().toString(36).slice(2))),name,qty:num($('qty').value),unit,zone:$('zone').value,cat:$('cat').value,expiry:$('expiry').value};
+ let missing=false;if(change(a=>{if(editing&&!a.some(i=>i.id===editing)){missing=true;return a}return [...a.filter(i=>i.id!==item.id),item]})){$('editor').close();message(missing?'这条库存已被移除。':demo?'已更新示例库存。':'已保存 '+name+'。')}};
+$('usage').onsubmit=e=>{e.preventDefault();const n=num($('portion').value);let before,after,problem='';
+ if(change(a=>{before=a.find(x=>x.id===using);if(!before||n<=0||n>before.qty){problem='库存数量已变化，请重新选择用量。';return a}const left=num(before.qty-n);after=left?{...before,qty:left}:undefined;return a.flatMap(x=>x.id!==using?[x]:after?[after]:[])})){$('consume').close();message(problem||('已用掉 '+n+' '+before.unit+before.name+'。'),problem?null:restoreItem(before,after))}};
+$('del').onclick=()=>{let old;if(change(a=>{old=a.find(x=>x.id===editing);return a.filter(x=>x.id!==editing)})){$('editor').close();message('已移除这条记录。',old?restoreItem(old,undefined):null)}};
+$('demo').onclick=toggleDemo;$('new').onclick=()=>edit();$('search').oninput=render;$('close').onclick=()=>$('editor').close();$('closeUse').onclick=()=>$('consume').close();
+for(const [k,v] of Object.entries(labels)){$('cat').add(new Option(v[0],k))}
+$('quick').replaceChildren(...shortcuts.map(([name,unit,cat])=>button(name,()=>{$('name').value=name;$('unit').value=unit;$('cat').value=cat})));
+window.addEventListener('storage',e=>{if(e.key===key||e.key===null){try{rows=readStore();render()}catch{message('无法读取库存。')}}});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)render()});setInterval(render,60000);render();if(!readable)message('无法读取本机库存。请在正常浏览窗口中打开。');
+</script></body></html>
